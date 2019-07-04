@@ -43,29 +43,61 @@ class _MidListViewState extends State<MidListView> {
   }
 
   Widget imageDesign() {
-    return Container(
-      width: 100,
-      height: 100,
-      // Decoration is a property that lets you style the container.
-      // It expects a BoxDecoration.
+
+    var loadedImage = Hero(
+      tag: dog,
+      child: Container(
+        width: 100,
+        height: 100,
+        // Decoration is a property that lets you style the container.
+        // It expects a BoxDecoration.
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+              fit: BoxFit.cover,
+              /// A NetworkImage widget is a widget that
+              /// takes a URL to an image.
+              image: NetworkImage(renderUrl ?? '')),
+        ),
+      ),
+    );
+
+    var placeholder = Container(
+      width: 100.0,
+      height: 100.0,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        image: DecorationImage(
-            fit: BoxFit.cover,
-            /// A NetworkImage widget is a widget that
-            /// takes a URL to an image.
-            // ImageProviders (such as NetworkImage) are ideal
-            // when your image needs to be loaded or can change.
-            // Use the null check to avoid an error.
-            image: NetworkImage(renderUrl ?? '')),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.black54, Colors.black, Colors.blueGrey[600]],
+        ),
       ),
+      alignment: Alignment.center,
+      child: Text(
+        'PUPPY',
+        textAlign: TextAlign.center,
+      ),
+    );
+
+    return AnimatedCrossFade(
+      // You pass it the starting widget and the ending widget.
+      firstChild: placeholder,
+      secondChild: loadedImage,
+
+      // If renderUrl is null tell the widget to use the placeholder,
+      // otherwise use the dogAvatar.
+      crossFadeState: renderUrl == null
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
+      duration: Duration(milliseconds: 1000),
     );
   }
 
   Widget cardDesign() {
     return Container(
       height: 115,
-      width: 290,
+      width: 390,
       child: Card(
         color: Colors.black87,
         child: Padding(
@@ -110,8 +142,7 @@ class _MidListViewState extends State<MidListView> {
         /// A stack takes children, with a list of widgets.
         child: Stack(
           children: <Widget>[
-            // position our dog image, so we can explicitly place it.
-            // We'll place it after we've made the card.
+            
             Positioned(
               left: 50.0,
               child: cardDesign(),

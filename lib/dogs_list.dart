@@ -6,15 +6,8 @@ import 'mid_list_view.dart';
 
 class DogsList extends StatelessWidget {
 
-  List<Dog> initialDoggos = []
-    ..add(Dog('Ruby', 'Portland, OR, USA',
-        'Ruby is a very good girl. Yes: Fetch, loungin\'. No: Dogs who get on furniture.'))
-    ..add(Dog('Rex', 'Seattle, WA, USA', 'Best in Show 1999'))
-    ..add(Dog('Rod Stewart', 'Prague, CZ',
-        'Star good boy on international snooze team.'))
-    ..add(Dog('Herbert', 'Dallas, TX, USA', 'A Very Good Boy'))
-    ..add(Dog('Buddy', 'North Pole, Earth', 'Self proclaimed human lover.'));
-
+  final List<Dog> initialDoggos;
+  DogsList(this.initialDoggos);
 
   Widget _buildListView(List<Widget> categories) {
 
@@ -24,12 +17,21 @@ class DogsList extends StatelessWidget {
     );
   }
 
+  void addDog(Dog dog) {
+    print("New Dog ${dog.name}");
+    initialDoggos.add(dog);
+    print("NNN : $initialDoggos");
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    print("List build");
 
     var categories = <MidListView>[];
 
     for (var i = 0; i < initialDoggos.length; i++) {
+      print("count = $i");
       categories.add(MidListView(initialDoggos[i]));
     }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dog.dart';
 import 'dogs_list.dart';
+import 'new_dog_form.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,33 +32,74 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+
+  List<Dog> initialDoggos = []
+    ..add(Dog('Ruby', 'Portland, OR, USA',
+        'Ruby is a very good girl. Yes: Fetch, loungin\'. No: Dogs who get on furniture.'))
+    ..add(Dog('Rex', 'Seattle, WA, USA', 'Best in Show 1999'))
+    ..add(Dog('Rod Stewart', 'Prague, CZ',
+        'Star good boy on international snooze team.'))
+    ..add(Dog('Herbert', 'Dallas, TX, USA', 'A Very Good Boy'))
+    ..add(Dog('Buddy', 'North Pole, Earth', 'Self proclaimed human lover.'));
+
+  /// Any time you're pushing a new route and expect that route
+/// to return something back to you,
+/// you need to use an async function.
+/// In this case, the function will create a form page
+/// which the user can fill out and submit.
+/// On submission, the information in that form page
+/// will be passed back to this function.
+  Future _showNewDogForm() async {
+    // push a new route like you did in the last section
+    Dog newDog = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return AddDogFormPage();
+        },
+      ),
+    );
+    // A null check, to make sure that the user didn't abandon the form.
+    if (newDog != null) {
+      initialDoggos.add(newDog);
+//      setState(() {
+//        print("Change");
+//      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
+    print("Home Build");
     return Scaffold(
       appBar: AppBar(
         /// Access this widgets properties with 'widget'
         title: Text(widget.title),
         backgroundColor: Colors.black87,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: _showNewDogForm,
+          ),
+        ],
       ),
 
       /// Container can be used as a placeholder in your code.
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            stops: [0.1,0.4,0.6,0.9],
-            colors: [
-              // Colors are easy thanks to Flutter's Colors class.
-              Colors.red[800],
-              Colors.red[600],
-              Colors.red[400],
-              Colors.red[200],
-            ],
-          )
-        ),
-        child: DogsList(),
+            gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          stops: [0.1, 0.4, 0.6, 0.9],
+          colors: [
+            // Colors are easy thanks to Flutter's Colors class.
+            Colors.red[800],
+            Colors.red[600],
+            Colors.red[400],
+            Colors.red[200],
+          ],
+        )),
+        child: DogsList(initialDoggos),
       ),
     );
   }
@@ -75,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
 //  );
 //}
 /// Contains other files too
-
 
 /// Counter App
 //void main() => runApp(new MyApp());
